@@ -1,3 +1,3 @@
-module placeholder/blogaggregator
+module go/gator
 
 go 1.25.0
