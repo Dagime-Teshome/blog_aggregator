@@ -1,29 +1,65 @@
 package config
 
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+	"path/filepath"
+)
+
 type Config struct {
-	db_url            string
-	current_user_name string
+	Db_url            string `json:"db_url"`
+	Current_user_name string `json:"current_user_name"`
 }
 
 const configFileName = ".gatorconfig.json"
 
-func (*Config) SetUser(user string) {
-	// set the user to the config
-	// write the new value to the json config file
+func (c *Config) SetUser(user string) {
+	c.Current_user_name = user
+	err := write(c)
+	if err != nil {
+		panic(err)
+	}
 }
 
-func Read() *Config {
+func Read() (Config, error) {
 	// read values from home director
 	// write those value to a config struct
 	// return the config struct
+	fileLocation, err := getConfigFilePath()
+	if err != nil {
+		return Config{}, fmt.Errorf("error getting config file:%s", err)
+	}
 
-	return nil
+	fileByte, err := os.ReadFile(fileLocation)
+	if err != nil {
+		return Config{}, fmt.Errorf("Error reading file:%w", err)
+	}
+	var cfg Config
+
+	if err := json.Unmarshal(fileByte, &cfg); err != nil {
+		return Config{}, fmt.Errorf("Error transforming to json: %w", err)
+	}
+
+	return cfg, nil
 }
 
 func getConfigFilePath() (string, error) {
-	return "", nil
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return "", fmt.Errorf("Error getting home director:%s", err)
+	}
+	return filepath.Join(home, configFileName), nil
 }
 
-func write(cfg Config) error {
-	return nil
+func write(cfg *Config) error {
+	filepath, err := getConfigFilePath()
+	if err != nil {
+		return fmt.Errorf("error getting config file path:%w", err)
+	}
+	data, err := json.MarshalIndent(cfg, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(filepath, data, 0644)
 }
