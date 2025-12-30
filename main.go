@@ -2,11 +2,20 @@ package main
 
 import (
 	"fmt"
+	"go/gator/internal/config"
+	"log"
 )
 
 func main() {
-	fmt.Println("Doesn't do anything yet")
-	// get config file
-	// import config package
-	// fix file name
+
+	configStruct, err := config.Read()
+	if err != nil {
+		log.Fatal(fmt.Errorf("error reading config file:%w", err))
+	}
+	configStruct.SetUser("Dagime")
+	newConfig, err := config.Read()
+	if err != nil {
+		log.Fatal(fmt.Errorf("Error reading config file%w", err))
+	}
+	fmt.Println(newConfig)
 }
