@@ -14,12 +14,13 @@ type Config struct {
 
 const configFileName = ".gatorconfig.json"
 
-func (c *Config) SetUser(user string) {
+func (c *Config) SetUser(user string) error {
 	c.Current_user_name = user
 	err := write(c)
 	if err != nil {
-		panic(err)
+		return fmt.Errorf("Couldn't write user to config : %w", err)
 	}
+	return nil
 }
 
 func Read() (Config, error) {
