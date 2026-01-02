@@ -24,9 +24,7 @@ func (c *Config) SetUser(user string) error {
 }
 
 func Read() (Config, error) {
-	// read values from home director
-	// write those value to a config struct
-	// return the config struct
+
 	fileLocation, err := getConfigFilePath()
 	if err != nil {
 		return Config{}, fmt.Errorf("error getting config file:%s", err)
