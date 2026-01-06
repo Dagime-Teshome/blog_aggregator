@@ -1,12 +1,20 @@
 package cli
 
-import "fmt"
+import (
+	"context"
+	"fmt"
+)
 
 func HandlerLogin(s *State, cmd Command) error {
 	if len(cmd.Args) == 0 {
 		return fmt.Errorf("User name Required")
 	}
-	err := s.Config.SetUser(cmd.Args[0])
+	ctx := context.Background()
+	feted_user, err := s.Db.GetUser(ctx, cmd.Args[0])
+	if err != nil {
+		return fmt.Errorf("User doesn't exist %v", err)
+	}
+	err = s.Config.SetUser(feted_user.Name)
 	if err != nil {
 		return err
 	}
