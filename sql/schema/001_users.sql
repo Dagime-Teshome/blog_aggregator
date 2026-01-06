@@ -1,5 +1,10 @@
 -- +goose Up
--- create user database
+Create table users (
+    id UUID primary key,
+    created_at timestamp not null,
+    updated_at timestamp not null,
+    name    VARCHAR(50) unique not null
+);
 
 -- +goose Down
--- drop user database
+Drop table users;
