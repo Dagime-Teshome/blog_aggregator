@@ -15,5 +15,9 @@ Select *
 from users
 where name = $1;
 
+-- name: GetUsers :many
+Select * from users;
+
 -- name: ResetUserTable :exec
 DELETE  FROM users;
+
