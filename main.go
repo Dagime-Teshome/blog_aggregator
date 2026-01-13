@@ -37,6 +37,7 @@ func main() {
 	commands.Register("reset", cli.Reset)
 	commands.Register("users", cli.GetUsers)
 	commands.Register("agg", cli.Agg)
+	commands.Register("addfeed", cli.AddFeed)
 	var command cli.Command
 	command.Name = os.Args[1]
 	command.Args = append(command.Args, os.Args[2:]...)
