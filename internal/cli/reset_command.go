@@ -11,6 +11,9 @@ func Reset(s *State, cmd Command) error {
 	if err := s.Db.ResetUserTable(ctx); err != nil {
 		return err
 	}
-	fmt.Print("User table reset \n")
+	if err := s.Db.ResetFeeds(ctx); err != nil {
+		return err
+	}
+	fmt.Print("Tables reset \n")
 	return nil
 }
