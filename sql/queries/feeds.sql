@@ -9,3 +9,11 @@ VALUES(
     $6
 )
 RETURNING *;
+
+
+-- name: GetFeeds :many
+
+Select * from feeds;
+
+-- name: ResetFeeds :exec
+DELETE from feeds;
