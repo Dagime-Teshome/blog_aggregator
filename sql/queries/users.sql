@@ -15,6 +15,10 @@ Select *
 from users
 where name = $1;
 
+-- name: GetUserById :one
+Select * from users
+where id = $1;
+
 -- name: GetUsers :many
 Select * from users;
 
