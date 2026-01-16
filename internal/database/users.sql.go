@@ -48,7 +48,6 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 }
 
 const getUser = `-- name: GetUser :one
-
 Select id, created_at, updated_at, name
 from users
 where name = $1
