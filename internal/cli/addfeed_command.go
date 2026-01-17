@@ -9,14 +9,10 @@ import (
 	"github.com/google/uuid"
 )
 
-func AddFeed(s *State, cmd Command) error {
+func AddFeed(s *State, cmd Command, user database.User) error {
 	ctx := context.Background()
 	if len(cmd.Args) < 1 {
 		return fmt.Errorf("not enough arguments")
-	}
-	user, err := getUser(ctx, s)
-	if err != nil {
-		return err
 	}
 	feed := database.CreateFeedParams{
 		ID:        uuid.New(),
@@ -36,15 +32,6 @@ func AddFeed(s *State, cmd Command) error {
 	}
 	fmt.Println(dbFeed)
 	return nil
-}
-
-func getUser(ctx context.Context, s *State) (*database.User, error) {
-	name := s.Config.Current_user_name
-	user, err := s.Db.GetUser(ctx, name)
-	if err != nil {
-		return nil, err
-	}
-	return &user, nil
 }
 
 func autoFeedFollow(s *State, ctx context.Context, userId uuid.UUID, feedId uuid.UUID) error {

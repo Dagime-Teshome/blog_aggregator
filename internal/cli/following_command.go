@@ -3,17 +3,13 @@ package cli
 import (
 	"context"
 	"fmt"
+	"go/gator/internal/database"
 
 	"github.com/google/uuid"
 )
 
-func Following(s *State, cmd Command) error {
+func Following(s *State, cmd Command, user database.User) error {
 	ctx := context.Background()
-	userName := s.Config.Current_user_name
-	user, err := s.Db.GetUser(ctx, userName)
-	if err != nil {
-		return fmt.Errorf("Couldn't find user %w", err)
-	}
 	feedsList, err := s.Db.GetFeedFollowsForUser(ctx, user.ID)
 	if err != nil {
 		return fmt.Errorf("error getting feeds user follow: %w", err)
