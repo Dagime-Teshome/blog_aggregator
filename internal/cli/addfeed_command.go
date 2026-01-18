@@ -10,10 +10,10 @@ import (
 )
 
 func AddFeed(s *State, cmd Command, user database.User) error {
-	ctx := context.Background()
-	if len(cmd.Args) < 1 {
+	if len(cmd.Args) < 2 {
 		return fmt.Errorf("not enough arguments")
 	}
+	ctx := context.Background()
 	feed := database.CreateFeedParams{
 		ID:        uuid.New(),
 		Name:      cmd.Args[0],
