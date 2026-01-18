@@ -14,7 +14,9 @@ func LoggedInMiddleWare(handler func(s *cli.State, cmd cli.Command, user databas
 		if err != nil {
 			return fmt.Errorf("error fetching user %w", err)
 		}
-		handler(s, cmd, user)
+		if err := handler(s, cmd, user); err != nil {
+			return err
+		}
 		return nil
 	}
 
