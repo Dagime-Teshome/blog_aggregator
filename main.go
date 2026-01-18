@@ -42,6 +42,7 @@ func main() {
 	commands.Register("feeds", cli.FeedsList)
 	commands.Register("follow", middleware.LoggedInMiddleWare(cli.Follow))
 	commands.Register("following", middleware.LoggedInMiddleWare(cli.Following))
+	commands.Register("unfollow", middleware.LoggedInMiddleWare(cli.UnfollowFeed))
 	var command cli.Command
 	command.Name = os.Args[1]
 	command.Args = append(command.Args, os.Args[2:]...)
