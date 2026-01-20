@@ -22,20 +22,20 @@ func FetchFeed(ctx context.Context, feedURL string) (*RSSFeed, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
-	rssfeedByte, err := io.ReadAll(resp.Body)
+	rssFeedByte, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
-	var rssfeed RSSFeed
-	err = xml.Unmarshal(rssfeedByte, &rssfeed)
+	var rssFeed RSSFeed
+	err = xml.Unmarshal(rssFeedByte, &rssFeed)
 	if err != nil {
 		return nil, fmt.Errorf("error marshalling:%v", err)
 	}
-	rssfeed.Channel.Title = html.UnescapeString(rssfeed.Channel.Title)
-	rssfeed.Channel.Description = html.UnescapeString(rssfeed.Channel.Description)
-	for _, value := range rssfeed.Channel.Item {
+	rssFeed.Channel.Title = html.UnescapeString(rssFeed.Channel.Title)
+	rssFeed.Channel.Description = html.UnescapeString(rssFeed.Channel.Description)
+	for _, value := range rssFeed.Channel.Item {
 		value.Title = html.UnescapeString(value.Title)
 		value.Description = html.UnescapeString(value.Description)
 	}
-	return &rssfeed, nil
+	return &rssFeed, nil
 }
