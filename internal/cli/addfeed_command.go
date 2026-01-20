@@ -30,7 +30,7 @@ func AddFeed(s *State, cmd Command, user database.User) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println(dbFeed)
+	fmt.Printf("feed %s created with url %s added to feed list\n", dbFeed.Name, dbFeed.Url)
 	return nil
 }
 
