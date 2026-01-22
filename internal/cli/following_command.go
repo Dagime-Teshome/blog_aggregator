@@ -14,6 +14,10 @@ func Following(s *State, cmd Command, user database.User) error {
 	if err != nil {
 		return fmt.Errorf("error getting feeds user follow: %w", err)
 	}
+	if len(feedsList) == 0 {
+		fmt.Println("user doesn't follow any feeds")
+		return nil
+	}
 	fmt.Println("---------------Feeds List---------------")
 	for i, feed := range feedsList {
 		feedName, err := getFeedName(ctx, s, feed.FeedID)
