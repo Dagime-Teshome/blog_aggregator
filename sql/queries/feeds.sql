@@ -10,6 +10,20 @@ VALUES(
 )
 RETURNING *;
 
+-- name: MarkFeedFetched :one
+update feeds
+set 
+last_fetched_at = Now(),
+updated_at = Now()
+where id = $1
+RETURNING *;
+
+-- name: GetNextFeedToFetch :one
+SELECT * FROM feeds
+ORDER BY last_fetched_at ASC NULLS FIRST
+LIMIT 1;
+
+
 -- name: GetFeedById :one
 Select * from
 feeds
