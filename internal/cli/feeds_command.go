@@ -14,8 +14,13 @@ func FeedsList(s *State, cmd Command) error {
 	if err != nil {
 		return fmt.Errorf("error fetching feeds: %v", err)
 	}
+	if len(feeds) == 0 {
+		fmt.Println("no feeds in database")
+		return nil
+	}
 	for indx, feed := range feeds {
 		userName, err := getUserName(ctx, s, feed.UserID)
+		fmt.Println(userName)
 		if err != nil {
 			return fmt.Errorf("error getting user :%v", err)
 		}
