@@ -3,12 +3,13 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"go/gator/internal/cli"
-	"go/gator/internal/config"
-	"go/gator/internal/database"
-	"go/gator/internal/middleware"
 	"log"
 	"os"
+
+	"github.com/Dagime-Teshome/blog_aggregator/internal/cli"
+	"github.com/Dagime-Teshome/blog_aggregator/internal/config"
+	"github.com/Dagime-Teshome/blog_aggregator/internal/database"
+	"github.com/Dagime-Teshome/blog_aggregator/internal/middleware"
 
 	_ "github.com/lib/pq"
 )
