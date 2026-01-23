@@ -63,9 +63,13 @@ Create a config file in your home directory:
 content should have the following
 
 ```json
+{
   "db_url": "postgres://postgres:postgres@localhost:5432/gator?sslmode=disable",
   "current_user_name": "username_goes_here"
+}
 ```
+
+Replace the values with your database connection string.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p> <!-- COMMANDS -->
 ## Commands
@@ -232,7 +236,7 @@ gator unfollow https://techcrunch.com/feed/
 
 ---
 
-### `discover`
+### `browse`
 
 Returns aggregated posts from feeds the user follows.
 
@@ -242,10 +246,10 @@ Returns aggregated posts from feeds the user follows.
 **Example:**
 
 ```bash
-gator discover 5
+gator browse [limit]
 ```
 
-This returns 5 posts from feeds that the user follows.
+This returns the amount given in limit posts from feeds that the user follows.
 
 ## Example Workflow
 
