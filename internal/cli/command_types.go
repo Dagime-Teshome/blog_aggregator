@@ -2,8 +2,9 @@ package cli
 
 import (
 	"fmt"
-	"go/gator/internal/config"
-	"go/gator/internal/database"
+
+	"github.com/Dagime-Teshome/blog_aggregator/internal/config"
+	"github.com/Dagime-Teshome/blog_aggregator/internal/database"
 )
 
 type State struct {

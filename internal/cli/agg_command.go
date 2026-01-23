@@ -4,11 +4,12 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"go/gator/internal/database"
-	feed "go/gator/internal/rss_feed"
 	"log"
 	"strings"
 	"time"
+
+	"github.com/Dagime-Teshome/blog_aggregator/internal/database"
+	feed "github.com/Dagime-Teshome/blog_aggregator/internal/rss_feed"
 
 	"github.com/google/uuid"
 )

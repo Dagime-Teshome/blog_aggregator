@@ -3,8 +3,9 @@ package cli
 import (
 	"context"
 	"fmt"
-	"go/gator/internal/database"
 	"strconv"
+
+	"github.com/Dagime-Teshome/blog_aggregator/internal/database"
 )
 
 func Browse(s *State, cmd Command, user database.User) error {

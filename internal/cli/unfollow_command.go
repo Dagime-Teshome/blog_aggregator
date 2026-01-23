@@ -3,7 +3,8 @@ package cli
 import (
 	"context"
 	"fmt"
-	"go/gator/internal/database"
+
+	"github.com/Dagime-Teshome/blog_aggregator/internal/database"
 )
 
 func UnfollowFeed(s *State, cmd Command, user database.User) error {

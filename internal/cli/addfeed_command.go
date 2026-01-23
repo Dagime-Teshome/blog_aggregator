@@ -3,8 +3,9 @@ package cli
 import (
 	"context"
 	"fmt"
-	"go/gator/internal/database"
 	"time"
+
+	"github.com/Dagime-Teshome/blog_aggregator/internal/database"
 
 	"github.com/google/uuid"
 )

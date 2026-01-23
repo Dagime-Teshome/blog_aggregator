@@ -3,8 +3,9 @@ package middleware
 import (
 	"context"
 	"fmt"
-	"go/gator/internal/cli"
-	"go/gator/internal/database"
+
+	"github.com/Dagime-Teshome/blog_aggregator/internal/cli"
+	"github.com/Dagime-Teshome/blog_aggregator/internal/database"
 )
 
 func LoggedInMiddleWare(handler func(s *cli.State, cmd cli.Command, user database.User) error) func(s *cli.State, cmd cli.Command) error {
