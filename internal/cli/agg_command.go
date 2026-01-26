@@ -88,10 +88,3 @@ func scrapeFeed(db *database.Queries, db_feed database.Feed) {
 	}
 	log.Printf("Feed %s collected, %v posts found", db_feed.Name, len(feedData.Channel.Item))
 }
-
-func printFeed(feed feed.RSSFeed) {
-	fmt.Println(fmt.Sprintf("--------------------feeds list for %s-------------------", feed.Channel.Title))
-	for _, feed := range feed.Channel.Item {
-		fmt.Printf("feed title : %s \n", feed.Title)
-	}
-}
