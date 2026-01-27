@@ -8,17 +8,17 @@ import (
 )
 
 type Config struct {
-	Db_url            string `json:"db_url"`
-	Current_user_name string `json:"current_user_name"`
+	DbURL           string `json:"db_url"`
+	CurrentUserName string `json:"current_user_name"`
 }
 
 const configFileName = ".gatorconfig.json"
 
 func (c *Config) SetUser(user string) error {
-	c.Current_user_name = user
+	c.CurrentUserName = user
 	err := write(c)
 	if err != nil {
-		return fmt.Errorf("Couldn't write user to config : %w", err)
+		return fmt.Errorf("couldn't write user to config: %w", err)
 	}
 	return nil
 }
