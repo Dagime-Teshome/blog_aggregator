@@ -12,7 +12,7 @@ import (
 
 func Register(s *State, cmd Command) error {
 	if len(cmd.Args) < 1 {
-		return fmt.Errorf("Arguments fewer than expected")
+		return fmt.Errorf("arguments fewer than expected")
 	}
 	user := database.CreateUserParams{
 		ID:        uuid.New(),
@@ -21,13 +21,13 @@ func Register(s *State, cmd Command) error {
 		UpdatedAt: time.Now(),
 	}
 	ctx := context.Background()
-	created_user, err := s.Db.CreateUser(ctx, user)
+	createdUser, err := s.Db.CreateUser(ctx, user)
 	if err != nil {
 		return err
 	}
-	if err := s.Config.SetUser(created_user.Name); err != nil {
+	if err := s.Config.SetUser(createdUser.Name); err != nil {
 		return err
 	}
-	fmt.Printf("User %s is successfully created with data : %v\n", created_user.Name, created_user)
+	fmt.Printf("User %s is successfully created with data: %v\n", createdUser.Name, createdUser)
 	return nil
 }

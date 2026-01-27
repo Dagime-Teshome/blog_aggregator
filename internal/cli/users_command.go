@@ -16,7 +16,7 @@ func GetUsers(s *State, cmd Command) error {
 		return nil
 	}
 	for _, value := range usersList {
-		if value.Name == s.Config.Current_user_name {
+		if value.Name == s.Config.CurrentUserName {
 			fmt.Printf("* %s (current)\n", value.Name)
 			continue
 		}
