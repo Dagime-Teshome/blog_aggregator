@@ -30,7 +30,10 @@ func Follow(s *State, cmd Command, user database.User) error {
 		FeedID:    feed.ID,
 		UserID:    user.ID,
 	}
-	followFeed, err := s.Db.FollowFeed(ctx, feedParams)
-	fmt.Println(followFeed)
+	_, err = s.Db.FollowFeed(ctx, feedParams)
+	if err != nil {
+		return fmt.Errorf("following feed: %w", err)
+	}
+	fmt.Printf("Now following feed: %s\n", feed.Name)
 	return nil
 }
