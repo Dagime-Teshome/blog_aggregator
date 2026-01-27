@@ -7,35 +7,44 @@ import (
 	"html"
 	"io"
 	"net/http"
+	"time"
 )
 
+// defaultClient is a reusable HTTP client with sensible timeout
+var defaultClient = &http.Client{
+	Timeout: 30 * time.Second,
+}
+
 func FetchFeed(ctx context.Context, feedURL string) (*RSSFeed, error) {
-	client := http.Client{}
 
 	req, err := http.NewRequestWithContext(ctx, "GET", feedURL, nil)
-	req.Header.Set("User-Agent", "gator")
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("creating request: %w", err)
 	}
-	resp, err := client.Do(req)
+	req.Header.Set("User-Agent", "gator")
+
+	resp, err := defaultClient.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("fetching feed: %w", err)
 	}
 	defer resp.Body.Close()
+
 	rssFeedByte, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("reading response body: %w", err)
 	}
+
 	var rssFeed RSSFeed
-	err = xml.Unmarshal(rssFeedByte, &rssFeed)
-	if err != nil {
-		return nil, fmt.Errorf("error marshalling:%v", err)
+	if err := xml.Unmarshal(rssFeedByte, &rssFeed); err != nil {
+		return nil, fmt.Errorf("unmarshalling XML: %w", err)
 	}
+
 	rssFeed.Channel.Title = html.UnescapeString(rssFeed.Channel.Title)
 	rssFeed.Channel.Description = html.UnescapeString(rssFeed.Channel.Description)
-	for _, value := range rssFeed.Channel.Item {
-		value.Title = html.UnescapeString(value.Title)
-		value.Description = html.UnescapeString(value.Description)
+	for i := range rssFeed.Channel.Item {
+		rssFeed.Channel.Item[i].Title = html.UnescapeString(rssFeed.Channel.Item[i].Title)
+		rssFeed.Channel.Item[i].Description = html.UnescapeString(rssFeed.Channel.Item[i].Description)
 	}
+
 	return &rssFeed, nil
 }
