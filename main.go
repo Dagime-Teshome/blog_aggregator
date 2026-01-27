@@ -15,41 +15,62 @@ import (
 )
 
 func main() {
-	if len(os.Args) < 2 {
-		log.Fatal("Not enough arguments")
-		return
-	}
-	state := cli.State{}
-	configStruct, err := config.Read()
+	cfg, err := config.Read()
 	if err != nil {
-		log.Fatal(fmt.Errorf("error reading config file:%w", err))
-		return
+		log.Fatalf("error reading config file: %v", err)
 	}
-	db, err := sql.Open("postgres", configStruct.Db_url)
 
-	db_queries := database.New(db)
-	state.Db = db_queries
-
-	state.Config = &configStruct
-	commands := cli.Commands{
-		ComMap: make(map[string]func(*cli.State, cli.Command) error, 0),
+	db, err := sql.Open("postgres", cfg.DbURL)
+	if err != nil {
+		log.Fatalf("error opening database: %v", err)
 	}
-	commands.Register("login", cli.HandlerLogin)
-	commands.Register("register", cli.Register)
-	commands.Register("reset", cli.Reset)
-	commands.Register("users", cli.GetUsers)
-	commands.Register("agg", cli.Agg)
-	commands.Register("addfeed", middleware.LoggedInMiddleWare(cli.AddFeed))
-	commands.Register("feeds", cli.FeedsList)
-	commands.Register("follow", middleware.LoggedInMiddleWare(cli.Follow))
-	commands.Register("following", middleware.LoggedInMiddleWare(cli.Following))
-	commands.Register("unfollow", middleware.LoggedInMiddleWare(cli.UnfollowFeed))
-	commands.Register("browse", middleware.LoggedInMiddleWare(cli.Browse))
-	var command cli.Command
-	command.Name = os.Args[1]
-	command.Args = append(command.Args, os.Args[2:]...)
-	if err := commands.Run(&state, command); err != nil {
+
+	state := &cli.State{
+		Db:     database.New(db),
+		Config: &cfg,
+	}
+
+	commands := cli.NewCommands()
+
+	commands.Register("help", cli.HandlerHelp(commands),
+		"Show available commands", "gator help")
+
+	commands.Register("login", cli.HandlerLogin,
+		"Log in an existing user", "gator login <username>")
+	commands.Register("register", cli.Register,
+		"Register a new user", "gator register <username>")
+	commands.Register("users", cli.GetUsers,
+		"List all users", "gator users")
+
+	commands.Register("reset", cli.Reset,
+		"Reset all database tables", "gator reset")
+
+	commands.Register("agg", cli.Agg,
+		"Start feed aggregation", "gator agg <interval>")
+	commands.Register("addfeed", middleware.LoggedInMiddleWare(cli.AddFeed),
+		"Add a new feed", "gator addfeed <name> <url>")
+	commands.Register("feeds", cli.FeedsList,
+		"List all feeds", "gator feeds")
+	commands.Register("follow", middleware.LoggedInMiddleWare(cli.Follow),
+		"Follow a feed", "gator follow <url>")
+	commands.Register("following", middleware.LoggedInMiddleWare(cli.Following),
+		"List feeds you follow", "gator following")
+	commands.Register("unfollow", middleware.LoggedInMiddleWare(cli.UnfollowFeed),
+		"Unfollow a feed", "gator unfollow <url>")
+	commands.Register("browse", middleware.LoggedInMiddleWare(cli.Browse),
+		"Browse posts from followed feeds", "gator browse [limit]")
+
+	if len(os.Args) < 2 {
+		fmt.Print(commands.Help())
+		os.Exit(1)
+	}
+
+	command := cli.Command{
+		Name: os.Args[1],
+		Args: os.Args[2:],
+	}
+
+	if err := commands.Run(state, command); err != nil {
 		log.Fatal(err)
 	}
-
 }
