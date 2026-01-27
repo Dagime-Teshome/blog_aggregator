@@ -48,6 +48,6 @@ func autoFeedFollow(s *State, ctx context.Context, userId uuid.UUID, feedId uuid
 	if err != nil {
 		return err
 	}
-	fmt.Printf(" %s user following %s feed\n", s.Config.Current_user_name, followFeed.FeedName)
+	fmt.Printf(" %s user following %s feed\n", s.Config.CurrentUserName, followFeed.FeedName)
 	return nil
 }

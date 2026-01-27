@@ -18,13 +18,13 @@ func Agg(s *State, cmd Command) error {
 	if len(cmd.Args) < 1 {
 		return fmt.Errorf("not enough arguments")
 	}
-	time_between_reqs, err := time.ParseDuration(cmd.Args[0])
+	timeBetweenReqs, err := time.ParseDuration(cmd.Args[0])
 	if err != nil {
 		return fmt.Errorf("error parsing request interval: %w", err)
 	}
 
-	ticker := time.NewTicker(time_between_reqs)
-	fmt.Printf("Collecting feeds every %v\n", time_between_reqs)
+	ticker := time.NewTicker(timeBetweenReqs)
+	fmt.Printf("Collecting feeds every %v\n", timeBetweenReqs)
 	for ; ; <-ticker.C {
 		scrapeFeeds(s)
 	}
@@ -32,13 +32,13 @@ func Agg(s *State, cmd Command) error {
 
 func scrapeFeeds(s *State) {
 	ctx := context.Background()
-	fetch_feed, err := s.Db.GetNextFeedToFetch(ctx)
+	fetchedFeed, err := s.Db.GetNextFeedToFetch(ctx)
 	if err != nil {
-		log.Println("error getting next feed %w", err)
+		log.Println("error getting next feed:", err)
 		return
 	}
 	log.Println("Found a feed to fetch!")
-	scrapeFeed(s.Db, fetch_feed)
+	scrapeFeed(s.Db, fetchedFeed)
 }
 
 func scrapeFeed(db *database.Queries, db_feed database.Feed) {
